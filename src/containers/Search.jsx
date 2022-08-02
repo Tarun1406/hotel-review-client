@@ -7,6 +7,8 @@ import Navbar from '../components/Navbar/Navbar'
 import { images } from '../utils';
 import './Search.scss';
 
+const serverUrl = 'https://tarun-hotel-server.herokuapp.com';
+
 // const image = "https://pix10.agoda.net/hotelImages/124/1246280/1246280_16061017110043391702.jpg?ca=6&ce=1&s=1024x768";
 
 const SearchBar = ({location, setLocation, locations, hotel, setHotel, hotels}) => {
@@ -28,7 +30,7 @@ const Search = () => {
 
     useEffect(() => {
         const getLocations = async () => {
-            const l = await fetch('http://localhost:8080/locations').then((res) => res.json());
+            const l = await fetch(`${serverUrl}/locations`).then((res) => res.json());
             setLocations(l);
         }
         getLocations();
@@ -37,7 +39,7 @@ const Search = () => {
     useEffect(() => {
         setHotel('');
         const getHotels = async () => {
-            const h = await fetch(`http://localhost:8080/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
+            const h = await fetch(`${serverUrl}/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
             console.log(h);
             setHotels(h);
         }
@@ -48,7 +50,7 @@ const Search = () => {
         setMore(0);
         setReview([]);
         const getReviews = async (loc) => {
-            const r = await fetch(`http://localhost:8080/reviews?location=${loc.toLowerCase()}`).then((res) => res.json());
+            const r = await fetch(`${serverUrl}/reviews?location=${loc.toLowerCase()}`).then((res) => res.json());
             console.log(r);
             setReview(r);
         }
@@ -56,7 +58,7 @@ const Search = () => {
         if (location) {
             if (hotel) {
                 const getReview = async () => {
-                    const r = await fetch(`http://localhost:8080/review?location=${location.toLowerCase()}&hotel=${hotel}`).then((res) => res.json());
+                    const r = await fetch(`${serverUrl}/review?location=${location.toLowerCase()}&hotel=${hotel}`).then((res) => res.json());
                     console.log(r);
                     setReview(r);
                 }
@@ -106,7 +108,7 @@ const Search = () => {
                                 <div key={idx}>
                                     <div className="hotel">
                                         <div className="image-container">
-                                            <img src={images[idx]} />
+                                            <img src={images[idx]} alt="hotel image" />
                                             <span className="rank">
                                                 Rank: #{idx + 1}
                                                 <span className="hotel-rating">

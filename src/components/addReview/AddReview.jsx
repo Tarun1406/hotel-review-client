@@ -5,6 +5,8 @@ import AddValue from '../addValue/AddValue';
 import './AddReview.scss';
 import RatingStars from '../ratingStars/RatingStars';
 
+const serverUrl = 'https://tarun-hotel-server.herokuapp.com';
+
 const AddReview = ({ formValues, setFormValues }) => {
     const [location, setLocation] = useState('');
     const [hotel, setHotel] = useState('');
@@ -14,7 +16,7 @@ const AddReview = ({ formValues, setFormValues }) => {
 
     useEffect(() => {
         const getLocations = async () => {
-            const l = await fetch('http://localhost:8080/locations').then((res) => res.json());
+            const l = await fetch(`${serverUrl}/locations`).then((res) => res.json());
             setLocations(l);
         }
         getLocations();
@@ -22,7 +24,7 @@ const AddReview = ({ formValues, setFormValues }) => {
 
     useEffect(() => {
         const getHotels = async () => {
-            const h = await fetch(`http://localhost:8080/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
+            const h = await fetch(`${serverUrl}/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
             console.log(h);
             setHotels(h);
         }
@@ -58,7 +60,7 @@ const AddReview = ({ formValues, setFormValues }) => {
         if (!validateEmail(formValues.email)) {
             setEmailError(true);
         } else setEmailError(false);
-        const res = await fetch('http://localhost:8080/review', {
+        const res = await fetch(`${serverUrl}/review`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

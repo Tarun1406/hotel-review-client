@@ -5,12 +5,11 @@ import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import './RatingStars.scss';
 
 const RatingStars = (props) => {
-  const { count, values, setValues } = props;
+  const { count, value, updateValue } = props;
   const [stars, setStars] = useState([]);
-  const [value, setValue] = useState(values.rating);
 
   useEffect(() => {
-    setValues((prev) => { return { ...prev, rating: value } });
+    updateValue('rating', value);
     setStars((prev) => []);
     for (let i = 0; i < value; i++) {
       setStars((prev) => [...prev, { icon: StarOutlinedIcon, outline: true }])
@@ -25,7 +24,7 @@ const RatingStars = (props) => {
       Rating:
       <div className="star-container">
         {stars.map((a, idx) =>
-          <a.icon onClick={() => { setValue(idx + 1) }} className={`star star-${a.outline ? 'outline' : 'border'}`} key={idx} />
+          <a.icon onClick={() => { updateValue('rating', idx+1) }} className={`star star-${a.outline ? 'outline' : 'border'}`} key={idx} />
         )}
       </div>
     </div>

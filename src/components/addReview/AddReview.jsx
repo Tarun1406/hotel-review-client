@@ -5,7 +5,14 @@ import AddValue from '../addValue/AddValue';
 import './AddReview.scss';
 import RatingStars from '../ratingStars/RatingStars';
 
-const serverUrl = 'https://tarun-hotel-server.herokuapp.com';
+const defaultFormValues = {
+    username: '',
+    location: '',
+    hotel: '',
+    review: '',
+    rating: 1,
+    email: '',
+};
 
 const AddReview = ({ formValues, setFormValues }) => {
     const [location, setLocation] = useState('');
@@ -16,7 +23,7 @@ const AddReview = ({ formValues, setFormValues }) => {
 
     useEffect(() => {
         const getLocations = async () => {
-            const l = await fetch(`${serverUrl}/locations`).then((res) => res.json());
+            const l = await fetch('http://localhost:8080/locations').then((res) => res.json());
             setLocations(l);
         }
         getLocations();
@@ -24,7 +31,7 @@ const AddReview = ({ formValues, setFormValues }) => {
 
     useEffect(() => {
         const getHotels = async () => {
-            const h = await fetch(`${serverUrl}/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
+            const h = await fetch(`http://localhost:8080/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
             console.log(h);
             setHotels(h);
         }
@@ -59,14 +66,20 @@ const AddReview = ({ formValues, setFormValues }) => {
         e.preventDefault();
         if (!validateEmail(formValues.email)) {
             setEmailError(true);
+            return;
         } else setEmailError(false);
-        const res = await fetch(`${serverUrl}/review`, {
+        const res = await fetch('http://localhost:8080/review', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(formValues)
         });
+        setLocation('');
+        setHotel('');
+        setEmailError(false);
+        setFormValues(defaultFormValues);
+        updateFormValues('rating', 1)
         console.log('post', res);
     }
 
@@ -101,7 +114,7 @@ const AddReview = ({ formValues, setFormValues }) => {
                 <AddValue type="Hotel" value={hotel} setValue={setHotel} options={hotels} disabled={!formValues.location} />
             </div>
             <div className="form-group">
-                <RatingStars count={7} values={formValues} setValues={setFormValues} />
+                <RatingStars count={7} value={formValues.rating} updateValue={updateFormValues} />
                 {/* <RatingStars count={7} values={formValues} setValues={setFormValues} /> */}
                 <TextareaAutosize
                     required

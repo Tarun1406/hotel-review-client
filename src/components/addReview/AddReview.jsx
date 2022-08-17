@@ -23,7 +23,7 @@ const AddReview = ({ formValues, setFormValues }) => {
 
     useEffect(() => {
         const getLocations = async () => {
-            const l = await fetch('http://localhost:8080/locations').then((res) => res.json());
+            const l = await fetch('https://tarun-hotel-server.herokuapp.com/locations').then((res) => res.json());
             setLocations(l);
         }
         getLocations();
@@ -31,7 +31,7 @@ const AddReview = ({ formValues, setFormValues }) => {
 
     useEffect(() => {
         const getHotels = async () => {
-            const h = await fetch(`http://localhost:8080/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
+            const h = await fetch(`https://tarun-hotel-server.herokuapp.com/hotels?location=${location.toLowerCase()}`).then((res) => res.json());
             console.log(h);
             setHotels(h);
         }
@@ -68,7 +68,7 @@ const AddReview = ({ formValues, setFormValues }) => {
             setEmailError(true);
             return;
         } else setEmailError(false);
-        const res = await fetch('http://localhost:8080/review', {
+        const res = await fetch('https://tarun-hotel-server.herokuapp.com/review', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
